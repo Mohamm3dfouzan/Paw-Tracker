@@ -1,0 +1,21 @@
+## XcodeGen-generated
+*.xcodeproj/
+## Build
+build/
+DerivedData/
+## Xcode user
+*.xcuserstate
+xcuserdata/
+*.xcuserdatad/
+## Swift
+.build/
+Package.resolved
+.swiftpm/
+## macOS
+.DS_Store
+## fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+## Claude Code local config
+.claude/settings.local.json

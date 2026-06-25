@@ -1,0 +1,91 @@
+name: PawDiary
+options:
+  bundleIdPrefix: com.fouzan
+  deploymentTarget:
+    iOS: "26.0"
+  createIntermediateGroups: true
+  groupSortPosition: top
+
+# ==============================================================
+# iCloud sync (opt-in, default OFF)
+# To enable: change the line below from `DEBUG` to `DEBUG ICLOUD_SYNC`
+# and regenerate with `xcodegen generate`. Requires a paid Apple
+# Developer team + matching iCloud container.
+# ==============================================================
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+    SWIFT_STRICT_CONCURRENCY: complete
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    GENERATE_INFOPLIST_FILE: YES
+    CURRENT_PROJECT_VERSION: 1
+    MARKETING_VERSION: "1.0"
+  configs:
+    Debug:
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: "DEBUG"
+    Release:
+      SWIFT_ACTIVE_COMPILATION_CONDITIONS: ""
+
+targets:
+  PawDiary:
+    type: application
+    platform: iOS
+    sources:
+      - path: PawDiary
+        excludes:
+          - "Resources/Info.plist"
+          - "Resources/PawDiary.entitlements"
+    resources:
+      - PawDiary/Resources/Assets.xcassets
+    dependencies:
+      - target: PawDiaryWidget
+        embed: true
+    info:
+      path: PawDiary/Resources/Info.plist
+      properties:
+        UILaunchScreen:
+          UIColorName: ""
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        NSPhotoLibraryUsageDescription: "PawDiary needs photo access to attach pictures of your pets."
+        NSCameraUsageDescription: "PawDiary uses the camera to capture pet photos."
+        NSUserNotificationsUsageDescription: "PawDiary schedules reminders for vaccinations and vet visits."
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.fouzan.PawDiary
+        TARGETED_DEVICE_FAMILY: "1,2"
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: "UIInterfaceOrientationPortrait"
+        CODE_SIGN_ENTITLEMENTS: PawDiary/Resources/PawDiary.entitlements
+
+  PawDiaryWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: PawDiaryWidget
+        excludes:
+          - "PawDiaryWidget.entitlements"
+      - path: PawDiary/Models
+      - path: PawDiary/Common/SharedContainer.swift
+      - path: PawDiary/Common/BagheeraMonochromeAvatarView.swift
+    info:
+      path: PawDiaryWidget/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+        CFBundleDisplayName: PawDiary
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.fouzan.PawDiary.Widget
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGN_ENTITLEMENTS: PawDiaryWidget/PawDiaryWidget.entitlements
+        SKIP_INSTALL: YES
+
+  PawDiaryTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [PawDiaryTests]
+    dependencies:
+      - target: PawDiary
